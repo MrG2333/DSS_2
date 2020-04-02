@@ -35,7 +35,8 @@ public class MUDClient implements MUDClientInterface{
     }
 
 
-    public static void startMUDGame(MUDClientInterface mud_client_stub) throws IOException {
+    public static void startMUDGame(MUDClientInterface mud_client_stub, MUDServerInterface mud_server) throws IOException {
+        MUDServer = mud_server;
         initialSetup(mud_client_stub);
         infoCurrentLocation();
         while (game_on) {

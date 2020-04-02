@@ -47,11 +47,12 @@ public class MUDServerMainLine{
             // server.
             MUDServerImpl mudserv = new MUDServerImpl();
             MUDServerInterface mudstub = (MUDServerInterface)UnicastRemoteObject.exportObject( mudserv, serverport );
-    
+            
             String regURL = "rmi://" + hostname + ":" + registryport + "/MUD";
                 System.out.println("Registering " + regURL );
                 Naming.rebind( regURL, mudstub );
-    
+            
+            
             // Note the server will not shut down!
         }  
         catch(java.net.UnknownHostException e) {

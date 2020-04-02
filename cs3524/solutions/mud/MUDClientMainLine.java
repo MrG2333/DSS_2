@@ -17,8 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MUDClientMainline()
+public class MUDClientMainLine
 {
+    private static MUDServerInterface MUDServer;
+
     public static void main(String args[]) {
         if (args.length < 3) {
             System.err.println("Use: java MUDClient <host> <registry_port> <callback_port>");
@@ -32,8 +34,8 @@ public class MUDClientMainline()
         System.setSecurityManager(new SecurityManager());
 
         
-            
-            MUDClientInterface mud_client_stub = (MUDClientInterface) UnicastRemoteObject.exportObject(MUDServer,
+            MUDClient mud_client = new MUDClient();
+            MUDClientInterface mud_client_stub = (MUDClientInterface) UnicastRemoteObject.exportObject(mud_client,
                     callbackport);
 
 
@@ -42,7 +44,7 @@ public class MUDClientMainline()
             
             
             MUDServer = (MUDServerInterface) Naming.lookup(regURL);
-            startMUDGame(mud_client_stub);
+            MUDClient.startMUDGame(mud_client_stub,MUDServer);
         } catch (java.io.IOException e) {
             System.err.println("I/O error.");
             System.err.println(e.getMessage());
