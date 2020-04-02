@@ -29,7 +29,7 @@ public class MUDClient implements MUDClientInterface{
     private static String player_name;
     private static boolean game_on = true;
     private static BufferedReader user_input = new BufferedReader(new InputStreamReader(System.in));
-    
+    private static MUDClientInterface client_stub;
 
     public MUDClient() throws RemoteException {
     }
@@ -37,7 +37,8 @@ public class MUDClient implements MUDClientInterface{
 
     public static void startMUDGame(MUDClientInterface mud_client_stub, MUDServerInterface mud_server) throws IOException {
         MUDServer = mud_server;
-        initialSetup(mud_client_stub);
+        client_stub = mud_client_stub;
+        initialSetup();
         infoCurrentLocation();
         while (game_on) {
             try {
@@ -63,7 +64,7 @@ public class MUDClient implements MUDClientInterface{
                 break;
             case "move":
                 String direction = split_choice[1];
-                player_location = MUDServer.movePlayer(player_location, direction, player_name);
+                player_location = MUDServer.movePlayer(player_location, direction, player_name,current_MUD_name);
                 infoCurrentLocation();
                 break;
 
@@ -104,14 +105,12 @@ public class MUDClient implements MUDClientInterface{
         }
     }
 
-    private static void initialSetup(MUDClientInterface mud_client_stub) throws IOException {
+    private static void initialSetup() throws IOException {
        
         
         player_name = chosePlayerName();
-        MUDServer.firstJoinMuds(current_MUD_name, mud_client_stub);
         joinMuds();
         
-        player_location = MUDServer.getStartLocation();
         
     }
 
@@ -121,12 +120,9 @@ public class MUDClient implements MUDClientInterface{
         return name;
     }
 
-    private static void addPlayerMUD() throws RemoteException {
-        MUDServer.addPlayerThing(player_location, player_name);
-    }
 
     public static void infoCurrentLocation() throws RemoteException {
-        System.out.println(MUDServer.getLocationInfo(player_location));
+        System.out.println(MUDServer.getLocationInfo(current_MUD_name,player_location));
     }
 
     /**
@@ -134,7 +130,7 @@ public class MUDClient implements MUDClientInterface{
      * 
      */
     public static void pickUpThing(String object) throws RemoteException {
-        String answer = MUDServer.pickObject(object, player_location,player_name);
+        String answer = MUDServer.pickObject(object, player_location,player_name,current_MUD_name);
         System.out.println(answer);
     }
 
@@ -143,7 +139,7 @@ public class MUDClient implements MUDClientInterface{
      *
      */
     public static void listUsersCurrentLocation() throws RemoteException {
-        String summary = MUDServer.getLocationInfo(player_location);
+        String summary = MUDServer.getLocationInfo(current_MUD_name, player_location);
         String[] split_summary = summary.split(" ");
         ArrayList<String> users_location = new ArrayList<String>();
         for (String s : split_summary) {
@@ -175,7 +171,7 @@ public class MUDClient implements MUDClientInterface{
      * List the things at the current location;
      */
     public static void listThings() throws RemoteException {
-        String summary = MUDServer.getLocationInfo(player_location);
+        String summary = MUDServer.getLocationInfo(current_MUD_name ,player_location);
         String things = summary.split("see:")[1];
         System.out.println(things);
     }
@@ -247,8 +243,10 @@ public class MUDClient implements MUDClientInterface{
         answer_join = MUDServer.joinMUD(mud_to_join,player_name);
         if(answer_join.contains("Accepted"))
         {
+            
             current_MUD_name = mud_to_join;
-
+            player_location = MUDServer.getStartLocation(current_MUD_name);
+            MUDServer.logClientInterface(player_name, client_stub,current_MUD_name,player_location);
             System.out.println(answer_join);
         }
         else 

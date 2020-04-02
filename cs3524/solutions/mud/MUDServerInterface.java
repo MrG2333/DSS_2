@@ -14,19 +14,19 @@ import java.util.Set;
 
 public interface MUDServerInterface extends Remote
 {
-    String getStartLocation() 
+    String getStartLocation(String current_MUD_name) 
     throws RemoteException;
     
-    String getLocationInfo(String location) 
+    String getLocationInfo(String mud_name, String player_location) 
     throws RemoteException;
 
-    void addPlayerThing(String player_location, String player_name)
+    void addPlayerThing(String player_location, String player_name, String mud_name)
     throws RemoteException;
 
-    String movePlayer(String player_location, String direction, String player_name)
+    String movePlayer(String player_location, String direction, String player_name, String mud_name)
     throws RemoteException;
 
-    public String pickObject(String object,String location, String player_name) 
+    public String pickObject(String object,String location, String player_name, String current_MUD_name) 
     throws RemoteException;
 
     public String listMudsAvailable() 
@@ -57,7 +57,7 @@ public interface MUDServerInterface extends Remote
     public String getCurrentLocation(String mud_name, String player_name)
     throws RemoteException;
 
-    public void firstJoinMuds(String player_name, MUDClientInterface mud_client_stub)
+    public void logClientInterface(String player_name, MUDClientInterface mud_client_stub, String player_name2, String player_location)
     throws RemoteException;
 
 
