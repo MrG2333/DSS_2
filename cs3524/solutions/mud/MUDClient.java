@@ -99,7 +99,12 @@ public class MUDClient implements MUDClientInterface{
             case "help":
                 printCommands();
                 break;
-
+            case "message_chat":
+                messageEveryoneOnMUD();
+                break;
+            case "message_user":
+                messagePlayer();
+                break;
             default:
                 System.out.println("Wrong command. Type help to show the list of commands.");
         }
@@ -191,6 +196,8 @@ public class MUDClient implements MUDClientInterface{
         System.out.println("quit_game             --Quits all MUDs and exists the game");
         System.out.println("exit_mud              --Exists the current MUD");
         System.out.println("switch_mud            --Switches focus from the current MUD");
+        System.out.println("message_chat          --Message everyone on current MUD");
+        System.out.println("message_user          --Message specific user on MUD");
         System.out.println("help                  --Prints this command list");
     }
 
@@ -358,10 +365,15 @@ public class MUDClient implements MUDClientInterface{
 
     /**
      * Message everyone on.
+     * 
+     * @throws IOException
      */
-    private static void messageEveryoneOnMUD()
+    private static void messageEveryoneOnMUD() throws IOException
     {
-        
+        String message;
+        System.out.println("Insert message to send");
+        message = user_input.readLine();
+        MUDServer.messageEveryone(player_name,message);
     }
 
 

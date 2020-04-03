@@ -284,4 +284,15 @@ public class MUDServerImpl implements MUDServerInterface {
         clients.get(player_name).receiveMessage(message);
     }
 
+    public void messsageEveryone(String player_name, String message) throws RemoteException
+    {
+        for (Map.Entry<String,MUDClientInterface> entry : clients.entrySet())
+        {   
+           
+            if(!entry.getKey().equals(player_name))
+            {
+                entry.getValue().receiveMessage(message);
+            }
+        }
+    }
 }

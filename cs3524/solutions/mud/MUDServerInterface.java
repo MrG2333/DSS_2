@@ -72,6 +72,9 @@ public interface MUDServerInterface extends Remote
     public void messagePlayer(String user_to_message, String message)
     throws RemoteException;
 
+    public void messageEveryone(String player_name, String message)
+    throws RemoteException;
+
 
 
 }
