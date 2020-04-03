@@ -66,6 +66,12 @@ public class MUDServerImpl implements MUDServerInterface {
         }
 
     }
+    public String getPlayerLocation(String player_name, String mud_name)
+    {
+        return Muds.get(mud_name).users.get(player_name);
+    }
+
+
     public boolean mudExists(String mud_name)
     {
         if(Muds.containsKey(mud_name)) {

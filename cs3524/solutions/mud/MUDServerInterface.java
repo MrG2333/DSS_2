@@ -78,6 +78,9 @@ public interface MUDServerInterface extends Remote
     public void messsageEveryone(String player_name, String message)
     throws RemoteException;
 
+    public String getPlayerLocation(String player_name, String current_MUD_name)
+    throws RemoteException;
+
 
 
 }

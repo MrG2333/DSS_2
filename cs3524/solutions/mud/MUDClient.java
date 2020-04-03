@@ -274,14 +274,22 @@ public class MUDClient implements MUDClientInterface{
 
         answer_join = MUDServer.joinMUD(mud_to_join,player_name);
         
-        
+        //could change to something less ugly 
         if(answer_join.contains("Accepted"))
         {
-            
+            if(answer_join.contains("already"))
+            {
+                current_MUD_name = mud_to_join;
+                player_location = MUDServer.getPlayerLocation(player_name,current_MUD_name);
+                MUDServer.logClientInterface(player_name, client_stub,current_MUD_name,player_location);
+                System.out.println(answer_join); 
+            }
+            else{
             current_MUD_name = mud_to_join;
             player_location = MUDServer.getStartLocation(current_MUD_name);
             MUDServer.logClientInterface(player_name, client_stub,current_MUD_name,player_location);
             System.out.println(answer_join);
+            }
         }
         else 
         {
