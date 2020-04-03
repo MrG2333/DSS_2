@@ -202,6 +202,19 @@ public class MUDServerImpl implements MUDServerInterface {
         return "Fail";
     }
 
+    public String dropObject(String object, String location, String player_name, String mud_name)
+    throws RemoteException
+    {
+        if(Muds.get(mud_name).userItems.get(player_name).contains(object))
+        {
+            Muds.get(mud_name).createThing(location, object);
+            Muds.get(mud_name).userItems.get(player_name).remove(object);
+            broadcastObjectDropped(object, mud_name, player_name);
+            return "Sucess";
+        }
+        return "Fail";
+    }
+
     public void broadcastObjectPicked(String object, String mud_name, String player_name) throws RemoteException
     {
         String message = "Player "+player_name+" has picked "+ object;
@@ -216,6 +229,19 @@ public class MUDServerImpl implements MUDServerInterface {
         }
     }
 
+    public void broadcastObjectDropped(String object, String mud_name, String player_name) throws RemoteException
+    {
+        String message = "Player "+player_name+" has dropped "+ object;
+        
+        for (Map.Entry<String,String> entry : Muds.get(mud_name).users.entrySet())  
+        {   
+           
+            if(!entry.getKey().equals(player_name))
+            {
+                clients.get(entry.getKey()).receiveMessage(message);
+            }
+        }
+    }
     public String addNewMUD(String mud_name) {
         if (maxMuds > Muds.size()) {
             Muds.put(mud_name, new MUD("mymud.edg", "mymud.msg", "mymud.thg"));
@@ -281,11 +307,13 @@ public class MUDServerImpl implements MUDServerInterface {
 
     public void messagePlayer(String player_name, String message) throws RemoteException
     {
+        message = player_name + " : "+message;
         clients.get(player_name).receiveMessage(message);
     }
 
     public void messsageEveryone(String player_name, String message) throws RemoteException
     {
+        message = player_name + " : "+message;
         for (Map.Entry<String,MUDClientInterface> entry : clients.entrySet())
         {   
            

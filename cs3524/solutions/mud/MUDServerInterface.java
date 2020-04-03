@@ -29,6 +29,9 @@ public interface MUDServerInterface extends Remote
     public String pickObject(String object,String location, String player_name, String current_MUD_name) 
     throws RemoteException;
 
+    public String dropObject(String object,String location, String player_name, String current_MUD_name) 
+    throws RemoteException;
+
     public String listMudsAvailable() 
     throws RemoteException;
     
@@ -72,7 +75,7 @@ public interface MUDServerInterface extends Remote
     public void messagePlayer(String user_to_message, String message)
     throws RemoteException;
 
-    public void messageEveryone(String player_name, String message)
+    public void messsageEveryone(String player_name, String message)
     throws RemoteException;
 
 

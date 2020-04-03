@@ -72,6 +72,10 @@ public class MUDClient implements MUDClientInterface{
                 String obj_to_pick = split_choice[1];
                 pickUpThing(obj_to_pick);
                 break;
+            case "drop":
+                String obj_to_drop = split_choice[1];
+                dropThing(obj_to_drop);
+                break;
             case "list_users":
                 listUsersCurrentLocation();
                 break;
@@ -140,6 +144,16 @@ public class MUDClient implements MUDClientInterface{
     }
 
     /**
+     * Drop item
+     */
+
+    public static void dropThing(String object) throws RemoteException
+    {
+        String answer = MUDServer.dropObject(object, player_location, player_name,current_MUD_name);
+        System.out.println(answer);
+    }
+
+    /**
      * List only users at location.
      *
      */
@@ -189,6 +203,7 @@ public class MUDClient implements MUDClientInterface{
         System.out.println("Commadns:");
         System.out.println("move <direction>      --moves the player in the wanted direction");
         System.out.println("pick <object>         --puts the item on the ground in the player's inventory");
+        System.out.println("drop <item>           --Drop an item from your inventory");
         System.out.println("list_users            --lists other players at the current location");
         System.out.println("list_items            --lists the items in the player's inventory");
         System.out.println("join_muds             --Shows available muds that the player can join for the first time");
@@ -199,6 +214,7 @@ public class MUDClient implements MUDClientInterface{
         System.out.println("message_chat          --Message everyone on current MUD");
         System.out.println("message_user          --Message specific user on MUD");
         System.out.println("help                  --Prints this command list");
+        
     }
 
     /**
@@ -373,9 +389,9 @@ public class MUDClient implements MUDClientInterface{
         String message;
         System.out.println("Insert message to send");
         message = user_input.readLine();
-        MUDServer.messageEveryone(player_name,message);
+        MUDServer.messsageEveryone(player_name,message);
     }
-
+    
 
     private static void messagePlayer() throws IOException
     {
