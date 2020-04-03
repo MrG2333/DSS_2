@@ -39,7 +39,7 @@ public interface MUDServerInterface extends Remote
     public void quitGame(String player_name)
     throws RemoteException;
 
-    public String switchMUD(String switch_mud,String player_name)
+    public String switchMUD(String switch_mud,String player_name, String current_mud_nam)
     throws RemoteException;
 
     public String addNewMUD(String name_new_mud)
@@ -58,6 +58,18 @@ public interface MUDServerInterface extends Remote
     throws RemoteException;
 
     public void logClientInterface(String player_name, MUDClientInterface mud_client_stub, String player_name2, String player_location)
+    throws RemoteException;
+
+    public boolean mudExists(String mud_to_join) 
+    throws RemoteException;
+
+    public String listUsersMUD(String current_MUD_name)
+    throws RemoteException;
+
+    public boolean userExists(String user_to_message, String current_MUD_name)
+    throws RemoteException;
+
+    public void messagePlayer(String user_to_message, String message)
     throws RemoteException;
 
 

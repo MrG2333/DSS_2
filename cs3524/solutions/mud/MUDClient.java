@@ -237,10 +237,21 @@ public class MUDClient implements MUDClientInterface{
         System.out.println("Chose a MUD to join");
         System.out.println("Available MUDs");
         //ADD check if MUD exists
+        
         listMuds();
         String mud_to_join = user_input.readLine();
         String answer_join;
+        
+        while(!MUDServer.mudExists(mud_to_join))
+        {
+            System.out.println("Insert a MUD that exists");
+            mud_to_join = user_input.readLine();
+        }
+
+
         answer_join = MUDServer.joinMUD(mud_to_join,player_name);
+        
+        
         if(answer_join.contains("Accepted"))
         {
             
@@ -278,7 +289,7 @@ public class MUDClient implements MUDClientInterface{
         if(existsMUD(switch_mud)){
             
             String answer;
-            answer = MUDServer.switchMUD(switch_mud,player_name);
+            answer = MUDServer.switchMUD(switch_mud,player_name, current_MUD_name);
             System.out.println(answer);
             if(answer.equals("Switched MUD"))
             {
@@ -344,4 +355,35 @@ public class MUDClient implements MUDClientInterface{
     {
         System.out.println(message);
     }
+
+    /**
+     * Message everyone on.
+     */
+    private static void messageEveryoneOnMUD()
+    {
+        
+    }
+
+
+    private static void messagePlayer() throws IOException
+    {
+        
+        String user_to_message;
+        String message;
+
+        System.out.println("Select user on MUD to message");
+        System.out.println(MUDServer.listUsersMUD(current_MUD_name));
+        user_to_message = user_input.readLine();
+        while(!MUDServer.userExists(user_to_message,current_MUD_name))
+        {
+        System.out.println("Insert a user that exists");
+        System.out.println("Available users:"+MUDServer.listUsersMUD(current_MUD_name));
+        user_to_message = user_input.readLine();
+        }
+    
+        System.out.println("Insert message to send");
+        message = user_input.readLine();
+        MUDServer.messagePlayer(user_to_message,message);
+    }
+
 }

@@ -45,9 +45,16 @@ public class MUDServerImpl implements MUDServerInterface {
      */
     public String joinMUD(String name_of_mud, String player_name) throws RemoteException {
         
+        if(!Muds.containsKey(name_of_mud))
+        {
+            return "Mud does not exist";
+        }
+
         String answer;
         answer = logMUDs(player_name);
         String start_location = getStartLocation(name_of_mud);
+       
+
         if (!Muds.get(name_of_mud).users.containsKey(player_name)) {
             Muds.get(name_of_mud).userItems.put(player_name, new ArrayList<String>());
             addPlayerThing(start_location, player_name,name_of_mud);
@@ -59,6 +66,15 @@ public class MUDServerImpl implements MUDServerInterface {
         }
 
     }
+    public boolean mudExists(String mud_name)
+    {
+        if(Muds.containsKey(mud_name)) {
+            return true;
+        }
+        return false;
+    }
+
+
 
     /**
      * Log client Interface
@@ -92,16 +108,16 @@ public class MUDServerImpl implements MUDServerInterface {
      * Change the current MUD
      */
 
-    public String switchMUD(String new_mud, String player_name) {
+    public String switchMUD(String new_mud, String player_name, String current_mud) {
 
         String location;
 
-        location = MUDInstance.users.get(player_name);
+        location = Muds.get(current_mud).users.get(player_name);
         String aux_player_name = "user:" + player_name;
         if (Muds.get(new_mud).users.containsKey(player_name)) {
-            MUDInstance.delThing(location, aux_player_name);
-            MUDInstance = Muds.get(new_mud);
-            addPlayerThing(MUDInstance.users.get(player_name), player_name,new_mud);
+            Muds.get(current_mud).delThing(location, aux_player_name);
+            
+            addPlayerThing(Muds.get(new_mud).users.get(player_name), player_name,new_mud);
             return "Switched MUD";
         } else {
             return "First join mud before switching";
@@ -141,7 +157,7 @@ public class MUDServerImpl implements MUDServerInterface {
             Muds.get(mud_name).createThing(location, item);
         }
         player_name = "user:" + player_name;
-        System.out.println("In quit current Game");
+       
         Muds.get(mud_name).delThing(location, player_name);
         Muds.get(mud_name).users.remove(player_name);
         Muds.get(mud_name).userItems.remove(player_name);
@@ -167,21 +183,37 @@ public class MUDServerImpl implements MUDServerInterface {
         String aux_player_name = "user:" + player_name;
         String location = Muds.get(mud_name).moveThing(player_location, direction, aux_player_name);
         
-        System.out.println("Old "+Muds.get(mud_name).users.get(player_name));
+       
         Muds.get(mud_name).users.replace(player_name, location);
-        System.out.println("New "+Muds.get(mud_name).users.get(player_name));
+       
         
         playerEntersLocation(player_name,mud_name, location);
         return location;
     }
 
-    public String pickObject(String object, String location, String player_name, String mud_name) {
+    public String pickObject(String object, String location, String player_name, String mud_name)
+            throws RemoteException {
         if (Muds.get(mud_name).thingExists(location, object)) {
             Muds.get(mud_name).userItems.get(player_name).add(object);
             Muds.get(mud_name).delThing(location, object);
+            broadcastObjectPicked(object, mud_name, player_name);
             return "Success";
         }
         return "Fail";
+    }
+
+    public void broadcastObjectPicked(String object, String mud_name, String player_name) throws RemoteException
+    {
+        String message = "Player "+player_name+" has picked "+ object;
+        
+        for (Map.Entry<String,String> entry : Muds.get(mud_name).users.entrySet())  
+        {   
+           
+            if(!entry.getKey().equals(player_name))
+            {
+                clients.get(entry.getKey()).receiveMessage(message);
+            }
+        }
     }
 
     public String addNewMUD(String mud_name) {
@@ -231,5 +263,25 @@ public class MUDServerImpl implements MUDServerInterface {
         client.receiveMessage(message);
     }
 
-   
+    public boolean userExists(String user_name, String mud_name)
+    {
+        if(Muds.get(mud_name).users.containsKey(user_name))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public String listUsersMUD(String mud_name)
+    {
+        String answer;
+        answer = Muds.get(mud_name).users.keySet().toString();
+        return answer;
+    }
+
+    public void messagePlayer(String player_name, String message) throws RemoteException
+    {
+        clients.get(player_name).receiveMessage(message);
+    }
+
 }
