@@ -138,16 +138,23 @@ public class MUDServerImpl implements MUDServerInterface {
      */
 
     public void quitGame(String player_name) {
+        String aux_player_name;
+        String player_location;
+        
         for (Map.Entry<String, MUD> maps : Muds.entrySet()) {
             for (Map.Entry<String, String> players : maps.getValue().users.entrySet()) {
                 if (player_name.equals(players.getKey())) {
-                    String aux_player_name = "user:" + player_name;
-                    String player_location = players.getValue();
+                   
+                    aux_player_name = "user:" + player_name;
+                    player_location = players.getValue();
+                    
                     for (int i = 0; i < maps.getValue().userItems.get(player_name).size(); i++) {
                         maps.getValue().createThing(player_location, maps.getValue().userItems.get(player_name).get(i));
                     }
+                    
                     maps.getValue().delThing(player_location, aux_player_name);
                     maps.getValue().users.remove(player_name);
+            
                 }
             }
         }

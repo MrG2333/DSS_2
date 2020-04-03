@@ -79,7 +79,9 @@ public class MUDClient implements MUDClientInterface{
             case "list_users":
                 listUsersCurrentLocation();
                 break;
-               
+            case "list_muds":
+                listMuds();
+                break;
             case "list_items":
                 listItems();
                 break;
@@ -206,11 +208,13 @@ public class MUDClient implements MUDClientInterface{
         System.out.println("drop <item>           --Drop an item from your inventory");
         System.out.println("list_users            --lists other players at the current location");
         System.out.println("list_items            --lists the items in the player's inventory");
+        System.out.println("list_muds             --List available MUDs");
         System.out.println("join_muds             --Shows available muds that the player can join for the first time");
         System.out.println("list_things           --Lists things on the ground players or items");
         System.out.println("quit_game             --Quits all MUDs and exists the game");
         System.out.println("exit_mud              --Exists the current MUD");
         System.out.println("switch_mud            --Switches focus from the current MUD");
+        System.out.println("new_mud               --Creates a new MUD");
         System.out.println("message_chat          --Message everyone on current MUD");
         System.out.println("message_user          --Message specific user on MUD");
         System.out.println("help                  --Prints this command list");
