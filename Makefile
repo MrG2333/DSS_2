@@ -1,17 +1,17 @@
 HOME="$(shell pwd)"
 
 mud:
-	javac cs3524/solutions/mud/Edge.java; \
-	javac cs3524/solutions/mud/MUD.java; \
-	javac cs3524/solutions/mud/Vertex.java; \
-	javac cs3524/solutions/mud/MUDServerMainLine.java; \
-	javac cs3524/solutions/mud/MUDServerInterface.java; \
-	javac cs3524/solutions/mud/MUDServerImpl.java; \
-	javac cs3524/solutions/mud/MUDClient.java; \
-	javac cs3524/solutions/mud/MUDClientInterface.java; \
-	javac cs3524/solutions/mud/MUDClientMainLine.java
+	javac mud/Edge.java; \
+	javac mud/MUD.java; \
+	javac mud/Vertex.java; \
+	javac mud/MUDServerMainLine.java; \
+	javac mud/MUDServerInterface.java; \
+	javac mud/MUDServerImpl.java; \
+	javac mud/MUDClient.java; \
+	javac mud/MUDClientInterface.java; \
+	javac mud/MUDClientMainLine.java
 mudclean:
-	cd cs3524/solutions/mud; \
+	cd mud; \
 	rm -f *.class;\
 	cd $(HOME) 
 	
